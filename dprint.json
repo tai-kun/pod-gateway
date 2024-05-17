@@ -1,0 +1,14 @@
+{
+  "excludes": [
+    "**/.cache",
+    "**/.history",
+    "**/target",
+    "**/*.lock"
+  ],
+  "lineWidth": 80,
+  "plugins": [
+    "https://plugins.dprint.dev/dockerfile-0.3.0.wasm",
+    "https://plugins.dprint.dev/json-0.19.2.wasm",
+    "https://plugins.dprint.dev/toml-0.6.1.wasm"
+  ]
+}

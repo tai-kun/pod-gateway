@@ -1,0 +1,83 @@
+# ---
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   name: expressvpn
+
+# ---
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: expressvpn
+#   namespace: expressvpn
+# type: Opaque
+# stringData:
+#   CODE: <ACTIVATION_CODE>
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: us
+  namespace: expressvpn
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 3150
+  selector:
+    app: gateway
+    country: us
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: usse
+  namespace: expressvpn
+  labels: &labels
+    app: gateway
+    country: us
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels: *labels
+  template:
+    metadata:
+      labels: *labels
+    spec:
+      initContainers:
+        - name: gateway-init
+          image: ghcr.io/tai-kun/pod-gateway:test
+          imagePullPolicy: Never # Remove except for local testing
+          args: ["gateway", "init"]
+          securityContext:
+            privileged: true
+          env:
+            - name: PGW_LOG_LEVEL
+              value: debug
+      containers:
+        - name: gateway-sidecar
+          image: ghcr.io/tai-kun/pod-gateway:test
+          imagePullPolicy: Never # Remove except for local testing
+          args: ["gateway", "start"]
+          ports:
+            - containerPort: 3150
+          securityContext:
+            privileged: true
+          env:
+            - name: PGW_LOG_LEVEL
+              value: debug
+        - name: gateway
+          image: misioslav/expressvpn:3.63.0.4
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SERVER
+              value: usse
+          envFrom:
+            - secretRef:
+                name: expressvpn
+          securityContext:
+            privileged: true

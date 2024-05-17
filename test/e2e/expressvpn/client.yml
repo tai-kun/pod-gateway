@@ -1,0 +1,35 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: client
+  namespace: default
+  labels:
+    app: client
+spec:
+  initContainers:
+    - name: gateway-init
+      image: ghcr.io/tai-kun/pod-gateway:test
+      imagePullPolicy: Never # Remove except for local testing
+      args: ["client", "init", "us.expressvpn.svc.cluster.local"]
+      securityContext:
+        privileged: true
+      env:
+        - name: PGW_LOG_LEVEL
+          value: debug
+  containers:
+    - name: gateway-sidecar
+      image: ghcr.io/tai-kun/pod-gateway:test
+      imagePullPolicy: Never # Remove except for local testing
+      args: ["client", "start", "us.expressvpn.svc.cluster.local"]
+      securityContext:
+        privileged: true
+      env:
+        - name: PGW_LOG_LEVEL
+          value: debug
+    - name: client-app
+      image: curlimages/curl:8.1.2
+      imagePullPolicy: IfNotPresent
+      command:
+        - sleep
+        - infinity

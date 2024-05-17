@@ -1,0 +1,8 @@
+[package]
+name = "pgw-logger"
+version = "0.1.0"
+edition = { workspace = true }
+
+[dependencies]
+serde = { version = "1.0.202", features = ["derive"] }
+serde_json = { version = "1.0.117" }

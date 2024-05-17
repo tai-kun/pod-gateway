@@ -1,0 +1,28 @@
+{
+  "editor.rulers": [80],
+  "[dockerfile]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "dprint.dprint"
+  },
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "dprint.dprint"
+  },
+  "[jsonc]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "dprint.dprint"
+  },
+  "[rust]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "rust-lang.rust-analyzer"
+  },
+  "[shellscript]": {
+    "editor.indentSize": 4,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[toml]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "dprint.dprint"
+  }
+}
